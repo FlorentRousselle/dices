@@ -44,7 +44,7 @@ flutter_icons:
 flutter_native_splash:
   color: "#ffffff"
   branding: "assets/icon-dice.png"
-
+  android_gravity: center
 
 dev_dependencies:
   flutter_test:
