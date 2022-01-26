@@ -13,7 +13,7 @@ void main() {
           title: const Text('Dice app'),
           backgroundColor: Colors.teal,
         ),
-        body: DicePage(),
+        body: const DicePage(),
       ),
     ),
   );

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:shake/shake.dart';
 
 import 'model/Dice.dart';
 
@@ -32,6 +33,9 @@ class _DicePageState extends State<DicePage> {
   @override
   void initState() {
     super.initState();
+    ShakeDetector detector = ShakeDetector.autoStart(onPhoneShake: (){
+      Rolling2Dice();
+    });
     resultOfDice = ResultOfDice(dices);
   }
 
@@ -99,10 +103,12 @@ class _DicePageState extends State<DicePage> {
       duration: const Duration(milliseconds: 50),
       transform: Transform(
         transform: Matrix4.identity()
+          /*
+          does not work with android
           ..translate(
               dices[index].isAnimated == true ? Random().nextDouble() * -10 : 0,
-              dices[index].isAnimated == true ? Random().nextDouble() * -20 : 0)
-          ..rotateX(dices[index].isAnimated == true ? 315 : 0),
+              dices[index].isAnimated == true ? Random().nextDouble() * -20 : 0)*/
+          ..rotateX(dices[index].isAnimated == true ? 45 : 0),
       ).transform,
       child: TextButton(
         child: Image.asset("assets/images/dice${dices[index].value}.png"),
