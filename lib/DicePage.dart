@@ -15,13 +15,16 @@ class DicePage extends StatefulWidget {
 class _DicePageState extends State<DicePage> {
   //dices
   int numberOfDice = 2;
-  List<Dice> dices = [Dice(Random().nextInt(6) + 1), Dice(Random().nextInt(6) + 1)];
+  List<Dice> dices = [
+    Dice(Random().nextInt(6) + 1),
+    Dice(Random().nextInt(6) + 1)
+  ];
   int resultOfDice = 0;
 
   AudioCache audioCache = AudioCache();
 
   //menu item list
-  static const menuItems = <int>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  static List<int> menuItems = List<int>.generate(10, (int index) => index + 1);
   final List<DropdownMenuItem<int>> dropDownMenuItem = menuItems
       .map((e) => DropdownMenuItem<int>(value: e, child: Text(e.toString())))
       .toList();
@@ -43,27 +46,50 @@ class _DicePageState extends State<DicePage> {
               value: numberOfDice,
               items: dropDownMenuItem,
               onChanged: (int? value) {
+                numberOfDice = value!;
                 setState(() {
-                  numberOfDice = value!;
-                  dices.clear();
-                  for (int cpt = 0; cpt < numberOfDice; cpt++) {
-                    dices.add(Dice(Random().nextInt(6) + 1));
-                  }
-                  resultOfDice = ResultOfDice(dices);
+                  refreshDiceList();
                 });
               })
+        ]),
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          ElevatedButton(
+              style: numberOfDice > 1
+                  ? const ButtonStyle()
+                  : ElevatedButton.styleFrom(primary: Colors.grey),
+              onPressed: () {
+                if (numberOfDice > 1) {
+                  numberOfDice--;
+                  setState(() {
+                    refreshDiceList();
+                  });
+                }
+              },
+              child: const Icon(Icons.remove)),
+          ElevatedButton(
+              style: numberOfDice < 10
+                  ? const ButtonStyle()
+                  : ElevatedButton.styleFrom(primary: Colors.grey),
+              onPressed: () {
+                if (numberOfDice < 10) {
+                  numberOfDice++;
+                  setState(() {
+                    refreshDiceList();
+                  });
+                }
+              },
+              child: const Icon(Icons.add))
         ]),
         Text("Résultat : $resultOfDice"),
         Expanded(
             child: GridView.count(
-          crossAxisCount: MediaQuery.of(context).size.width ~/ 100,
+          crossAxisCount: MediaQuery.of(context).size.width ~/ 120,
           mainAxisSpacing: 10,
           children: [
-            for(int cpt = 0; cpt < numberOfDice; cpt++) MyAnimatedDice(cpt),
+            for (int cpt = 0; cpt < numberOfDice; cpt++) MyAnimatedDice(cpt),
           ],
         )),
-        IconButton(
-            onPressed: () => Rolling2Dice(), icon: Icon(Icons.circle))
+        IconButton(onPressed: () => Rolling2Dice(), icon: Icon(Icons.circle))
       ],
     );
   }
@@ -71,10 +97,12 @@ class _DicePageState extends State<DicePage> {
   AnimatedContainer MyAnimatedDice(int index) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 50),
-      transform: Transform.translate(
-        offset: Offset(
-            dices[index].isAnimated == true ? Random().nextDouble() * -10 : 0,
-            dices[index].isAnimated == true ? Random().nextDouble() * -10 : 0),
+      transform: Transform(
+        transform: Matrix4.identity()
+          ..translate(
+              dices[index].isAnimated == true ? Random().nextDouble() * -10 : 0,
+              dices[index].isAnimated == true ? Random().nextDouble() * -20 : 0)
+          ..rotateX(dices[index].isAnimated == true ? 315 : 0),
       ).transform,
       child: TextButton(
         child: Image.asset("assets/images/dice${dices[index].value}.png"),
@@ -111,6 +139,14 @@ class _DicePageState extends State<DicePage> {
     }
     for (int idx = 0; idx < dices.length; idx++) {
       dices[idx].isAnimated = false;
+    }
+    resultOfDice = ResultOfDice(dices);
+  }
+
+  void refreshDiceList() {
+    dices.clear();
+    for (int cpt = 0; cpt < numberOfDice; cpt++) {
+      dices.add(Dice(Random().nextInt(6) + 1));
     }
     resultOfDice = ResultOfDice(dices);
   }

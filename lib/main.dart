@@ -1,4 +1,5 @@
 import 'package:dices/DicePage.dart';
+import 'package:dices/widget/DiceDrawer.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -6,9 +7,10 @@ void main() {
     MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        drawer: DiceDrawer(),
         backgroundColor: Colors.teal,
         appBar: AppBar(
-          title: const Text('2 Dés'),
+          title: const Text('Dice app'),
           backgroundColor: Colors.teal,
         ),
         body: DicePage(),
