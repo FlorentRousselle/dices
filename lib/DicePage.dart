@@ -34,7 +34,7 @@ class _DicePageState extends State<DicePage> {
   void initState() {
     super.initState();
     ShakeDetector detector = ShakeDetector.autoStart(onPhoneShake: () {
-      Rolling2Dice();
+      RollingAllDice();
     });
     resultOfDice = ResultOfDice(dices);
   }
@@ -105,7 +105,7 @@ class _DicePageState extends State<DicePage> {
             for (int cpt = 0; cpt < numberOfDice; cpt++) MyAnimatedDice(cpt),
           ],
         )),*/
-        IconButton(onPressed: () => Rolling2Dice(), icon: const Icon(Icons.circle))
+        IconButton(onPressed: () => RollingAllDice(), icon: const Icon(Icons.circle))
       ],
     );
   }
@@ -143,7 +143,7 @@ class _DicePageState extends State<DicePage> {
     resultOfDice = ResultOfDice(dices);
   }
 
-  Future<void> Rolling2Dice() async {
+  Future<void> RollingAllDice() async {
     audioCache.play("../assets/sounds/rolling-dice.wav");
     for (int cpt = 0; cpt < 10; cpt++) {
       await Future.delayed(const Duration(milliseconds: 50), () {
