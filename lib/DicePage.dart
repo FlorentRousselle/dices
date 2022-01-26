@@ -33,7 +33,7 @@ class _DicePageState extends State<DicePage> {
   @override
   void initState() {
     super.initState();
-    ShakeDetector detector = ShakeDetector.autoStart(onPhoneShake: (){
+    ShakeDetector detector = ShakeDetector.autoStart(onPhoneShake: () {
       Rolling2Dice();
     });
     resultOfDice = ResultOfDice(dices);
@@ -86,14 +86,26 @@ class _DicePageState extends State<DicePage> {
         ]),
         Text("Résultat : $resultOfDice"),
         Expanded(
+            child: OrientationBuilder(
+                builder: (context, orientation) => GridView.count(
+                      crossAxisCount:
+                          orientation == Orientation.portrait ? 2 : 6,
+                      mainAxisSpacing: 10,
+                      children: [
+                        for (int cpt = 0; cpt < numberOfDice; cpt++)
+                          MyAnimatedDice(cpt),
+                      ],
+                    ))),
+        /*
+        Expanded(
             child: GridView.count(
           crossAxisCount: MediaQuery.of(context).size.width ~/ 120,
           mainAxisSpacing: 10,
           children: [
             for (int cpt = 0; cpt < numberOfDice; cpt++) MyAnimatedDice(cpt),
           ],
-        )),
-        IconButton(onPressed: () => Rolling2Dice(), icon: Icon(Icons.circle))
+        )),*/
+        IconButton(onPressed: () => Rolling2Dice(), icon: const Icon(Icons.circle))
       ],
     );
   }
